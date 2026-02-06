@@ -1,0 +1,29 @@
+{
+  "name": "orangehrm-playwright-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "test": "cucumber-js",
+      "test:headed": "cross-env HEADED=true cucumber-js",
+      "test:chrome": "cross-env BROWSER=chromium cucumber-js",
+      "test:firefox": "cross-env BROWSER=firefox cucumber-js",
+      "test:webkit": "cross-env BROWSER=webkit cucumber-js",
+      "test:tag": "cucumber-js --tags",
+      "test:smoke": "cucumber-js --tags @smoke",
+      "report": "node src/utils/generate-report.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.6.0",
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^25.2.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.4",
+    "multiple-cucumber-html-reporter": "^3.9.3",
+    "ts-node": "^10.9.2"
+  }
+}
