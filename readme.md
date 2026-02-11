@@ -88,6 +88,7 @@ The framework includes pre-configured npm scripts for common execution modes.
 Currently, the **Login Module** is fully automated with the following coverage:
 
 | ID | Scenario | Type | Status |
+| :--- | :--- | :--- | :--- |
 | **TC_001** | Successful login with valid credentials | Smoke | ✅ Passing |
 | **TC_002** | Login fails with invalid username | Negative | ✅ Passing |
 | **TC_003** | Login fails with invalid password | Negative | ✅ Passing |
@@ -110,7 +111,7 @@ After execution, a summary is printed to the console. For a detailed report:
 
 ## Author
 
-**[Shakeeb]**
+* Shakeeb
 * QA Automation Engineer
 * [\[LinkedIn Profile\]](https://www.linkedin.com/in/shakeeb-mohammed-m7/)
 * [\[GitHub Profile\]](https://github.com/M7Shakeeb)
