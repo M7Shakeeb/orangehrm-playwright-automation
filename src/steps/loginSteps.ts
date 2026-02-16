@@ -65,13 +65,16 @@ Then('I should be redirected to the dashboard page', async function(this: Custom
   await dashboardPage.verifyDashboardURL();
 });
 
-// Verify dashboard heading is visible
+/* Verify dashboard heading is visible(removing this step as it's already covered in dashboardSteps.ts, which is from week 2)
+
 Then('the dashboard heading should be visible', async function(this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   
   const dashboardPage = new DashboardPage(this.page);
   await dashboardPage.verifyDashboardDisplayed();
 });
+*/
+
 
 // Verify error alert is displayed with expected text
 Then('I should see an error alert containing {string}', async function(this: CustomWorld, expectedText: string) {
