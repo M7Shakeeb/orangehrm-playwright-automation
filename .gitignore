@@ -7,3 +7,8 @@ videos/
 *.log
 playwright-report/
 test-results/
+# Docker volumes
+reports/*
+!reports/.gitkeep
+screenshots/*
+!screenshots/.gitkeep

@@ -1,0 +1,55 @@
+name: Smoke Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker-compose build --quiet
+
+      - name: Run smoke tests in Docker
+        run: docker-compose run -e BROWSER=chromium playwright-tests npm run test:smoke
+
+      - name: Generate Enhanced HTML Report
+        if: always()
+        run: docker-compose run playwright-tests npm run report
+
+      - name: Upload enhanced test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enhanced-test-reports
+          path: reports/enhanced/
+          retention-days: 14
+
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-screenshots
+          path: screenshots/
+          retention-days: 14
+
+      - name: Clean up Docker
+        if: always()
+        run: docker-compose down -v

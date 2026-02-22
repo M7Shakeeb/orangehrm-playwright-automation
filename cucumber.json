@@ -1,8 +1,5 @@
 {
   "default": {
-    "paths": [
-      "src/features/**/*.feature"
-    ],
     "require": [
       "src/steps/**/*.ts",
       "src/hooks/**/*.ts"
@@ -16,6 +13,8 @@
     "formatOptions": {
       "snippetInterface": "async-await"
     },
-    "parallel": 1
+    "parallel": 1,
+    "retry": 0,
+    "strict": true
   }
 }
