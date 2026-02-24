@@ -16,10 +16,10 @@
     "test:regression": "cucumber-js src/features --format progress-bar",
     "posttest:regression": "npm run report",
     "report": "node src/utils/generate-report.js",
-    "docker:build": "docker-compose build",
-    "docker:test": "docker-compose up --abort-on-container-exit",
-    "docker:test:smoke": "docker-compose run playwright-tests npm run test:smoke",
-    "docker:clean": "docker-compose down -v"
+    "docker:build": "docker compose build",
+    "docker:test": "docker compose up --abort-on-container-exit",
+    "docker:test:smoke": "docker compose run playwright-tests npm run test:smoke",
+    "docker:clean": "docker compose down -v"
   },
   "keywords": [],
   "author": "",

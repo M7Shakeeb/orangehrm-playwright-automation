@@ -25,14 +25,14 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker-compose build --quiet
+        run: docker compose build --quiet
 
       - name: Run smoke tests in Docker
-        run: docker-compose run -e BROWSER=chromium playwright-tests npm run test:smoke
+        run: docker compose run -e BROWSER=chromium playwright-tests npm run test:smoke
 
       - name: Generate Enhanced HTML Report
         if: always()
-        run: docker-compose run playwright-tests npm run report
+        run: docker compose run playwright-tests npm run report
 
       - name: Upload enhanced test reports
         if: always()
@@ -52,4 +52,4 @@ jobs:
 
       - name: Clean up Docker
         if: always()
-        run: docker-compose down -v
+        run: docker compose down -v
