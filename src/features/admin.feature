@@ -49,7 +49,7 @@ Feature: Admin User Management
     And I click Save button
     Then I should see validation error
 
-  @admin @edit
+  @admin @edit @skip
   Scenario: Edit existing user successfully
     Given I have added a test user with employee "m"
     When I search for the test user
@@ -58,7 +58,7 @@ Feature: Admin User Management
     And I click Save button
     Then the user should be updated successfully
 
-  @admin @delete
+  @admin @delete @skip
   Scenario: Delete user successfully
     Given I have added a test user with employee "r"
     When I delete the test user

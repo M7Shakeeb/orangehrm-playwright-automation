@@ -34,12 +34,30 @@
 
 ### Elements and Locators
 
-| Element           | Selector                     | Selector Type | Notes                        |
-| :---------------- | :--------------------------- | :------------ | :--------------------------- |
-| Dashboard Heading | `h6:has-text("Dashboard")`   | Tag + Text    | Confirms successful login    |
-| Main Navigation   | `.oxd-main-menu`             | Class         | Left sidebar menu            |
-| User Dropdown     | `.oxd-userdropdown`          | Class         | Top-right, shows logged user |
-| Logout Option     | `a:has-text("Logout")`       | Tag + Text    | Inside user dropdown         |
+| Element            | Selector                                      | Selector Type | Notes                         |
+|--------------------|-----------------------------------------------|---------------|-------------------------------|
+| Dashboard Heading  | `h6:has-text("Dashboard")`                    | Tag + Text    | Confirms successful login     |
+| Main Navigation    | `.oxd-main-menu`                              | Class         | Left sidebar menu             |
+| Admin Menu Item    | `a.oxd-main-menu-item:has-text("Admin")`      | Class + Text  | Specific menu option          |
+| User Dropdown      | `.oxd-userdropdown`                           | Class         | Top-right, shows logged user  |
+| Logout Option      | `a:has-text("Logout")`                        | Tag + Text    | Inside user dropdown          |
+
+---
+
+## Admin Module (User Management)
+
+**URL Pattern:** `/web/index.php/admin/viewSystemUsers`
+
+### Elements and Locators
+
+| Element                   | Selector                                                                                       | Selector Type    | Notes                           |
+|---------------------------|------------------------------------------------------------------------------------------------|------------------|---------------------------------|
+| **Page Heading**          | `h6.oxd-topbar-header-breadcrumb-module`                                                       | Element + Class  | Validates module load           |
+| **Search Username Input** | `searchContainer.locator('.oxd-input-group').filter({ hasText: 'Username' }).locator('input')` | Scoped Filter    | Avoids brittle CSS paths        |
+| **Add Button**            | `button:has-text("Add")`                                                                       | Element + Text   | Navigates to Add form           |
+| **Table Rows**            | `.oxd-table-card`                                                                              | Class            | Used to iterate through users   |
+| **Delete Confirm Dialog** | `.orangehrm-dialog-popup`                                                                      | Class            | Modal that appears on delete    |
+| **Confirm Delete Button** | `deleteDialog.locator('button').filter({ hasText: 'Yes, Delete' })`                            | Scoped Filter    | Final delete confirmation       |
 
 ---
 
@@ -68,3 +86,6 @@
 3. 🟠 Unique class names (moderate - may change with redesign)
 4. 🔴 Text content (fragile - translation issues)
 5. 🔴 DOM structure / deep selectors (very fragile)
+
+**Advanced Playwright Scoping:**
+For complex forms (like the Admin Add User form), locators should be scoped to a parent container (e.g., `.orangehrm-card-container`) to prevent accidentally selecting elements from the background UI or navigation bars. Text filtering (`.filter({ hasText: '...' })`) is used extensively to isolate specific input groups.

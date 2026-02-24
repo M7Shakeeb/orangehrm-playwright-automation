@@ -194,11 +194,11 @@ This Master Test Plan serves to:
 - [x] Jira project created with 5 test cases.
 
 **Week 2 - Exit Criteria:**
-- [ ] Dashboard module fully automated (navigation, logout).
-- [ ] Admin module (user management) automated.
-- [ ] Docker environment configured (`Dockerfile`, `docker-compose.yml`, `.dockerignore`).
-- [ ] Basic CI/CD pipeline active.
-- [ ] Enhanced HTML reporting implemented.
+- [x] Dashboard module fully automated (navigation, logout).
+- [x] Admin module (user management) automated.
+- [x] Docker environment configured (`Dockerfile`, `docker-compose.yml`, `.dockerignore`).
+- [x] Basic CI/CD pipeline active.
+- [x] Enhanced HTML reporting implemented.
 
 **Week 3 - Exit Criteria:**
 - [ ] PIM module (employee management) automated.
@@ -284,8 +284,9 @@ This Master Test Plan serves to:
 | 1.0 | Feb 5, 2026 | Initial Master Test Plan creation |
 | 1.1 | Feb 9, 2026 | Corrected timeline inconsistencies, added Docker strategy |
 | 1.2 | Feb 10, 2026 | Simplified structure, reduced verbosity, improved readability |
+| 1.3 | Feb 19, 2026 | Marked Week 2 milestones as complete, updated reporting tools |
 
 ---
 
 **Approved By:** Shakeeb
-**Date:** February 9, 2026
+**Date:** February 19, 2026

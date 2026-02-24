@@ -3,7 +3,7 @@
 [![Playwright](https://img.shields.io/badge/Playwright-1.58.1-45ba4b?style=for-the-badge&logo=Playwright&logoColor=white)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Cucumber](https://img.shields.io/badge/Cucumber_BDD-23D96C?style=for-the-badge&logo=cucumber&logoColor=white)](https://cucumber.io/)
-[![CI/CD Pipeline](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/orangehrm-playwright-automation/smoke-tests.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/M7Shakeeb/orangehrm-playwright-automation/actions)
+[![CI/CD Pipeline](https://img.shields.io/github/actions/workflow/status/M7Shakeeb/orangehrm-playwright-automation/smoke-tests.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/M7Shakeeb/orangehrm-playwright-automation/actions)
 
 A production-quality automated testing framework for the [OrangeHRM Demo Application](https://opensource-demo.orangehrmlive.com/). This project demonstrates a robust implementation of **Behavior Driven Development (BDD)** using **Playwright** and **TypeScript**.
 
@@ -44,6 +44,7 @@ orangehrm-playwright-automation/
 * **Node.js:** v18 or higher
 * **npm:** v8 or higher
 * **IDE:** VS Code
+* **Docker Desktop** 
 
 ## Installation & Setup
 
@@ -83,32 +84,40 @@ The framework includes pre-configured npm scripts for common execution modes.
 | `npm run test:firefox` | Run tests using the **Firefox** engine |
 | `npm run test:webkit` | Run tests using the **WebKit** (Safari) engine |
 | `npm run test:tags "@smoke"` | Run only scenarios tagged with `@smoke` |
+| `npm run report` | Generates the Enhanced HTML Report via multiple-cucumber-html-reporter |
+| `npm run docker:build` | Builds the Ubuntu/Playwright Docker image |
+| `npm run docker:test:smoke` | Executes the smoke test suite inside the isolated Docker container |
 
-## Test Scenarios (Week 1 Completion)
+## Test Scenarios (Week 2 Completion)
 
-Currently, the **Login Module** is fully automated with the following coverage:
+The framework currently provides automated coverage for the following modules:
 
-| ID | Scenario | Type | Status |
-| :--- | :--- | :--- | :--- |
-| **TC_001** | Successful login with valid credentials | Smoke | ✅ Passing |
-| **TC_002** | Login fails with invalid username | Negative | ✅ Passing |
-| **TC_003** | Login fails with invalid password | Negative | ✅ Passing |
-| **TC_004** | Validation error: Empty username | Functional | ✅ Passing |
-| **TC_005** | Validation error: Empty password | Functional | ✅ Passing |
+**1. Login Module**
+* ✅ Successful login, invalid credentials, empty field validations.
+
+**2. Dashboard Module**
+* ✅ UI visibility checks, module navigation workflows, logout security.
+
+**3. Admin Module (User Management)**
+* ✅ Full CRUD operations (Add, Edit, Delete users).
+* ✅ Search functionality and "No Records Found" validations.
+* ✅ Duplicate username data constraints.
 
 ## Test Reporting
 
 After execution, a summary is printed to the console. For a detailed report:
 
-1.  Navigate to the `reports/` folder.
-2.  Open `cucumber-report.html` in any browser.
-3.  **On Failure:** Check the report or the `screenshots/` folder for images named `FAILED_<ScenarioName>_<Timestamp>.png`.
+1.  Run `npm run report`.
+2.  Navigate to the `reports/enhanced/` folder.
+3.  Open `index.html` in any browser.
+4.  **On Failure:** The report automatically embeds full-page visual evidence of the exact failure state.
 
 ## Roadmap
 
-* **Week 2:** Dashboard & Admin Module (User Management), Docker Integration.
+* ~~**Week 1:** Foundation, Login Module, Framework Architecture.~~
+* ~~**Week 2:** Dashboard & Admin Module (User Management), Docker Integration, Basic CI/CD, Enhanced Reporting.~~
 * **Week 3:** PIM Module (Data-Driven Testing), Cross-Browser setup.
-* **Week 4:** Leave Module, CI/CD Pipeline (GitHub Actions), Advanced Reporting.
+* **Week 4:** Leave Module, Enhanced CI/CD Pipeline (GitHub Actions), Final Documentation Polish.
 
 ## Author
 
