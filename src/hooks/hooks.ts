@@ -3,12 +3,9 @@ import { chromium, firefox, webkit, Browser, BrowserContext, Page } from 'playwr
 import { config } from '../utils/config';
 import { CustomWorld, CustomWorldImpl } from '../types/world';
 
-
 setWorldConstructor(CustomWorldImpl);
 
-
 setDefaultTimeout(60000);
-
 
 BeforeAll(async function() {
   console.log('Test Execution Started');
@@ -18,7 +15,6 @@ BeforeAll(async function() {
   console.log(`Timeout: ${config.timeout}ms`);
   console.log('\n');
 });
-
 
 Before(async function(this: CustomWorld) {
   let browser: Browser;
@@ -38,14 +34,20 @@ Before(async function(this: CustomWorld) {
         break;
     }
 
-    // Create new browser context (like incognito mode)
-    const context: BrowserContext = await browser.newContext({
+    // Prepare context options
+    const contextOptions: any = {
       baseURL: config.baseURL,
       viewport: config.viewport,
       ignoreHTTPSErrors: true,
       acceptDownloads: false,
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    });
+    };
+
+    if (config.browser === 'chromium') {
+      contextOptions.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+    }
+
+    // Create new browser context
+    const context: BrowserContext = await browser.newContext(contextOptions);
 
     // Create new page
     const page: Page = await context.newPage();
@@ -61,7 +63,6 @@ Before(async function(this: CustomWorld) {
     throw error;
   }
 });
-
 
 After(async function(this: CustomWorld, { pickle, result }) {
   try {
@@ -94,7 +95,6 @@ After(async function(this: CustomWorld, { pickle, result }) {
     }
   }
 });
-
 
 AfterAll(async function() {
   console.log('Test Execution Completed');

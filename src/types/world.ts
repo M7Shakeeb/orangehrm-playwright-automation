@@ -1,25 +1,36 @@
-import { World, IWorldOptions } from '@cucumber/cucumber';
+import { World, IWorldOptions, setWorldConstructor } from '@cucumber/cucumber';
 import { Browser, BrowserContext, Page } from 'playwright';
 
-/**
- * Custom World interface extending Cucumber's World
- * This makes page, context, and browser available in all step definitions
- */
+// Scenario-specific data stored per World instance (safe for parallel execution)
+export interface ScenarioData {
+  // Admin module data
+  testUsername?: string;
+  testPassword?: string;
+  // PIM module data
+  testFirstName?: string;
+  testLastName?: string;
+  testUpdatedFirstName?: string;
+  testEmployeeId?: string;
+}
+
+// CustomWorld interface - defines the shape of 'this' in step definitions
 export interface CustomWorld extends World {
   browser?: Browser;
   context?: BrowserContext;
   page?: Page;
+  scenarioData: ScenarioData;
 }
 
-/**
- * Custom World class implementation
- */
+// CustomWorldImpl - concrete implementation with default values
 export class CustomWorldImpl extends World implements CustomWorld {
   browser?: Browser;
   context?: BrowserContext;
   page?: Page;
+  scenarioData: ScenarioData = {};
 
   constructor(options: IWorldOptions) {
     super(options);
   }
 }
+
+setWorldConstructor(CustomWorldImpl);

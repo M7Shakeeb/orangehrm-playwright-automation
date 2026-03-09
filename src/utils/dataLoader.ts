@@ -1,9 +1,33 @@
+/**
+ * ============================================================================
+ * DEPRECATED AS OF WEEK 3
+ * ============================================================================
+ * 
+ * Context: 
+ * This DataLoader was built to drive data-driven testing via external JSON.
+ * 
+ * Decision: 
+ * I officially pivoted away from this approach in favor of native Gherkin 
+ * `Scenario Outlines` and `Examples` tables (see src/features/pim.feature).
+ * 
+ * Reason: 
+ * If the OrangeHRM add employee form had 45 fields (address, tax info, 
+ * emergency contacts, dependents, etc.), putting 45 columns in a Gherkin 
+ * Examples table would be unreadable. In that case, JSON is mandatory.
+ * But for simple data like firstName and lastName, the Gherkin table is
+ * far superior because of the reporting benefits.
+ * 
+ * Status: 
+ * Code is preserved in the repository to demonstrate TypeScript file-system 
+ * and generic interface handling, but is not actively wired into the step definitions.
+ * ============================================================================
+ */
+
+
 import * as fs from 'fs';
 import * as path from 'path';
 
-/**
- * Defining the structure of users.json
- */
+// User Data Interfaces
 export interface UserData {
   validUser: {
     username: string;
@@ -19,12 +43,28 @@ export interface UserData {
   userStatuses: string[];
 }
 
-/**
- * Utility class for loading test data from JSON files
- */
+// Employee Data Interfaces
+export interface SearchTestCase {
+  searchName: string;
+  expectResults: boolean;
+  description: string;
+}
+
+export interface InvalidEmployee {
+  firstName: string;
+  lastName: string;
+  expectedError: string;
+}
+
+export interface EmployeeData {
+  searchTestCases: SearchTestCase[];
+  invalidEmployees: InvalidEmployee[];
+}
+
+// DataLoader Class
 export class DataLoader {
   
-  // Load JSON file from test-data directory
+  // Generic type-safe JSON loader with error handling
   static loadJSON<T>(filename: string): T {
     try {
       const filePath = path.join(process.cwd(), 'test-data', filename);
@@ -42,42 +82,37 @@ export class DataLoader {
     }
   }
 
-  /**
-   * Load complete user data structure from users.json
-   * @returns UserData object with all user test data
-   */
-  static getUsersData(): UserData {
+  // User Data Methods
+  static loadUserData(): UserData {
     return this.loadJSON<UserData>('users.json');
   }
 
-  /**
-   * Get valid user credentials
-   * @returns Valid user object
-   */
   static getValidUser() {
-    return this.getUsersData().validUser;
+    return this.loadUserData().validUser;
   }
 
-  /**
-   * Load invalid user test cases
-   * @returns Array of invalid user objects
-   */
   static getInvalidUsers() {
-    return this.getUsersData().invalidUsers;
+    return this.loadUserData().invalidUsers;
   }
 
-  /**
-   * Load admin user roles
-   * @returns Array of user role options
-   */
   static getUserRoles() {
-    return this.getUsersData().userRoles;
+    return this.loadUserData().userRoles;
   }
 
-  /**
-     Get available user statuses
-   */
   static getUserStatuses() {
-    return this.getUsersData().userStatuses;
+    return this.loadUserData().userStatuses;
+  }
+
+  // Employee Data Methods
+  static getEmployeeData(): EmployeeData {
+    return this.loadJSON<EmployeeData>('employees.json');
+  }
+
+  static getSearchTestCases(): SearchTestCase[] {
+    return this.getEmployeeData().searchTestCases;
+  }
+
+  static getInvalidEmployees(): InvalidEmployee[] {
+    return this.getEmployeeData().invalidEmployees;
   }
 }

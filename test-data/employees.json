@@ -1,0 +1,22 @@
+{
+  "_architectural_note": "DEPRECATED: We pivoted to using Gherkin Scenario Outlines for data-driven testing to preserve test isolation and reporting granularity. This file is kept for historical context.",
+  "searchTestCases": [
+    {
+      "searchName": "Admin",
+      "expectResults": true,
+      "description": "Search for known existing employee"
+    },
+    {
+      "searchName": "ZZZNoSuchEmployee999",
+      "expectResults": false,
+      "description": "Search for non-existing employee"
+    }
+  ],
+  "invalidEmployees": [
+    {
+      "firstName": "",
+      "lastName": "",
+      "expectedError": "Required"
+    }
+  ]
+}

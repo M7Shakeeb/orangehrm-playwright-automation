@@ -112,7 +112,7 @@ export class AdminPage {
   // ==================== VERIFICATION ====================
 
   async verifyAdminPageDisplayed() {
-    await expect(this.pageHeading).toBeVisible({ timeout: 10000 });
+    await expect(this.pageHeading).toBeVisible({ timeout: 30000 });
     await expect(this.searchContainer).toBeVisible();
   }
 
@@ -205,7 +205,7 @@ export class AdminPage {
     await this.clickAddButton();
     await this.fillUserForm(userData);
     await this.clickSaveButton();
-    await expect(this.resultsTable).toBeVisible({ timeout: 10000 });
+    await expect(this.resultsTable).toBeVisible({ timeout: 30000 });
   }
 
   // ==================== EDIT USER ====================
@@ -231,7 +231,7 @@ export class AdminPage {
     await this.clickEditForUser(username);
     await this.changeStatus(newStatus);
     await this.clickSaveButton();
-    await expect(this.resultsTable).toBeVisible({ timeout: 10000 });
+    await expect(this.resultsTable).toBeVisible({ timeout: 30000 });
   }
 
   // ==================== DELETE USER ====================

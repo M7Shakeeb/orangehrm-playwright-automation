@@ -60,7 +60,7 @@ When('I click on the Admin menu', async function(this: CustomWorld) {
 Then('I should be redirected to the Admin page', async function(this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   
-  await this.page.waitForURL('**/admin/**', { timeout: 10000 });
+  await this.page.waitForURL('**/admin/**', { timeout: 30000 });
   expect(this.page.url()).toContain('/admin');
 });
 
@@ -80,7 +80,7 @@ When('I click on the PIM menu', async function(this: CustomWorld) {
 Then('I should be redirected to the PIM page', async function(this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   
-  await this.page.waitForURL('**/pim/**', { timeout: 10000 });
+  await this.page.waitForURL('**/pim/**', { timeout: 30000 });
   expect(this.page.url()).toContain('/pim');
 });
 
@@ -100,7 +100,7 @@ When('I click on the Leave menu', async function(this: CustomWorld) {
 Then('I should be redirected to the Leave page', async function(this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   
-  await this.page.waitForURL('**/leave/**', { timeout: 10000 });
+  await this.page.waitForURL('**/leave/**', { timeout: 30000 });
   expect(this.page.url()).toContain('/leave');
 });
 
@@ -130,7 +130,7 @@ When('I click on logout option', async function(this: CustomWorld) {
 Then('I should be redirected to the login page', async function(this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   
-  await this.page.waitForURL('**/auth/login**', { timeout: 10000 });
+  await this.page.waitForURL('**/auth/login**', { timeout: 30000 });
   expect(this.page.url()).toContain('/auth/login');
 });
 

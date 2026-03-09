@@ -1,127 +1,312 @@
-# OrangeHRM Test Automation Framework
+# OrangeHRM Playwright Automation Framework
 
 [![Playwright](https://img.shields.io/badge/Playwright-1.58.1-45ba4b?style=for-the-badge&logo=Playwright&logoColor=white)](https://playwright.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Cucumber](https://img.shields.io/badge/Cucumber_BDD-23D96C?style=for-the-badge&logo=cucumber&logoColor=white)](https://cucumber.io/)
 [![CI/CD Pipeline](https://img.shields.io/github/actions/workflow/status/M7Shakeeb/orangehrm-playwright-automation/smoke-tests.yml?style=for-the-badge&logo=githubactions&logoColor=white)](https://github.com/M7Shakeeb/orangehrm-playwright-automation/actions)
 
-A production-quality automated testing framework for the [OrangeHRM Demo Application](https://opensource-demo.orangehrmlive.com/). This project demonstrates a robust implementation of **Behavior Driven Development (BDD)** using **Playwright** and **TypeScript**.
+A production-quality test automation framework for the
+[OrangeHRM Demo](https://opensource-demo.orangehrmlive.com) application,
+built as a portfolio project demonstrating modern QA engineering practices.
 
-## Key Features
+---
 
-* **Page Object Model (POM):**
-* **Cucumber BDD:** Gherkin syntax.
-* **Custom World Implementation:** Type-safe context sharing between steps using a custom `World` class.
-* **Robust Hooks:**
-    * Automatic browser context creation with **custom User-Agent** (bypasses headless bot detection).
-    * **Auto-Screenshots** on test failure attached directly to reports.
-    * Global setup/teardown for efficient resource management.
-* **Headless Stability:** Optimized timeouts (30s) and explicit waits to handle network lag in CI environments.
-* **Cross-Browser Support:** Configured for Chromium, Firefox, and WebKit.
+## Tech Stack
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| TypeScript | Strict mode | Type-safe test code |
+| Playwright | ^1.58.1 | Browser automation |
+| Cucumber | ^12.6.0 | BDD / Gherkin scenarios |
+| Docker | Latest | Containerized execution |
+| GitHub Actions | - | CI/CD pipeline |
+| Node.js | 18.x+ | Runtime |
+
+---
 
 ## Project Structure
 
 ```text
 orangehrm-playwright-automation/
+├── .github/workflows/    # CI/CD pipeline
 ├── src/
-│   ├── features/         # Gherkin feature files (Test Scenarios)
-│   ├── hooks/            # Global hooks (Before/After/AfterAll)
-│   ├── pages/            # Page Object Classes (Locators & Methods)
-│   ├── steps/            # Step Definitions (Glue code)
-│   ├── types/            # Custom Type Definitions (CustomWorld)
-│   └── utils/            # Configuration & Utilities
-├── reports/              # Generated HTML/JSON test reports
-├── screenshots/          # Auto-captured failure screenshots
-├── test-data/            # (Planned) External JSON data files
-├── .env                  # Environment variables (GitIgnored)
-├── cucumber.json         # Cucumber runner configuration
-├── package.json          # Dependencies & Scripts
-└── tsconfig.json         # TypeScript compiler options
+│   ├── features/         # Gherkin feature files
+│   │   ├── login.feature
+│   │   ├── dashboard.feature
+│   │   ├── admin.feature
+│   │   └── pim.feature
+│   ├── steps/            # Step definitions
+│   │   ├── loginSteps.ts
+│   │   ├── dashboardSteps.ts
+│   │   ├── adminSteps.ts
+│   │   └── pimSteps.ts
+│   ├── pages/            # Page Object Model classes
+│   │   ├── LoginPage.ts
+│   │   ├── DashboardPage.ts
+│   │   ├── AdminPage.ts
+│   │   └── PIMPage.ts
+│   ├── hooks/            # Cucumber hooks (browser setup/teardown)
+│   │   └── hooks.ts
+│   ├── utils/            # Utilities
+│   │   ├── config.ts
+│   │   ├── dataGenerator.ts
+│   │   └── generate-report.js
+│   └── types/            # TypeScript interfaces
+│       └── world.ts
+├── reports/              # Generated HTML/JSON reports
+├── screenshots/          # Failure screenshots (auto-captured)
+├── docs/                 # Documentation
+│   ├── master-test-plan.md
+│   ├── element-locators.md
+│   ├── docker-setup.md
+│   └── cross-browser-testing.md
+├── Dockerfile
+├── docker-compose.yml
+├── cucumber.json
+├── tsconfig.json
+├── package.json
+└── .env
 ```
 
-## Prerequisites
+---
 
-* **Node.js:** v18 or higher
-* **npm:** v8 or higher
-* **IDE:** VS Code
-* **Docker Desktop** 
+### Prerequisites
+- Node.js 18.x or higher
+- npm
+- Git
 
-## Installation & Setup
+### Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <your-repo-url>
-    cd orangehrm-playwright-automation
-    ```
+```powershell
+git clone <your-repo-url>
+cd orangehrm-playwright-automation
+npm install
+npx playwright install
+```
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+### Run All Tests
 
-3.  **Install Playwright browsers:**
-    ```bash
-    npx playwright install
-    ```
+```powershell
+npm test
+```
 
-4.  **Configure Environment Variables:**
-    Create a file named `.env` in the root directory and paste the following:
-    ```ini
-    BASE_URL=https://opensource-demo.orangehrmlive.com
-    BROWSER=chromium
-    HEADED=false
-    TIMEOUT=60000
-    ```
+### Run Smoke Tests Only
 
-## Executing Tests
+```powershell
+npm run test:smoke
+```
 
-The framework includes pre-configured npm scripts for common execution modes.
+---
+
+## All Available Commands
+
+<details>
+<summary><strong>👉 Click to view all execution commands and profiles</strong></summary>
+
+### Local Execution
 
 | Command | Description |
 | :--- | :--- |
-| `npm test` | Run all tests in **Headless** mode (Default) |
-| `npm run test:headed` | Run all tests in **Headed** mode (Visible browser) |
-| `npm run test:firefox` | Run tests using the **Firefox** engine |
-| `npm run test:webkit` | Run tests using the **WebKit** (Safari) engine |
-| `npm run test:tags "@smoke"` | Run only scenarios tagged with `@smoke` |
-| `npm run report` | Generates the Enhanced HTML Report via multiple-cucumber-html-reporter |
-| `npm run docker:build` | Builds the Ubuntu/Playwright Docker image |
-| `npm run docker:test:smoke` | Executes the smoke test suite inside the isolated Docker container |
+| `npm test` | Run full test suite (all browsers default to Chromium) |
+| `npm run test:headed` | Run with browser UI visible (for debugging) |
+| `npm run test:smoke` | Run `@smoke` tagged scenarios only |
+| `npm run test:regression` | Run full suite with minimal output |
+| `npm run test:pim` | Run PIM feature file only (excludes `@skip`) |
+| `npm run test:chrome` | Run full suite on Chromium |
+| `npm run test:firefox` | Run full suite on Firefox |
+| `npm run test:webkit` | Run full suite on WebKit |
+| `npm run test:cross-browser` | Run full suite on all 3 browsers sequentially |
 
-## Test Scenarios (Week 2 Completion)
+### Tag-Based Execution
 
-The framework currently provides automated coverage for the following modules:
+```powershell
+# Run by tag (append --tags "..." to cucumber-js command)
+npx cucumber-js src/features --tags "@smoke"
+npx cucumber-js src/features --tags "@pim and @add"
+npx cucumber-js src/features --tags "@e2e"
+npx cucumber-js src/features --tags "not @skip"
+npx cucumber-js src/features --tags "@data-driven"
+```
 
-**1. Login Module**
-* ✅ Successful login, invalid credentials, empty field validations.
+### Cross-Browser (Single Feature)
 
-**2. Dashboard Module**
-* ✅ UI visibility checks, module navigation workflows, logout security.
+```powershell
+npx cross-env BROWSER=firefox npx cucumber-js src/features/pim.feature -p firefox --tags "not @skip"
+npx cross-env BROWSER=webkit npx cucumber-js src/features -p webkit --tags "@smoke"
+```
 
-**3. Admin Module (User Management)**
-* ✅ Full CRUD operations (Add, Edit, Delete users).
-* ✅ Search functionality and "No Records Found" validations.
-* ✅ Duplicate username data constraints.
+### Reports
 
-## Test Reporting
+```powershell
+# Generate HTML report from last JSON run
+npm run report
 
-After execution, a summary is printed to the console. For a detailed report:
+# Open report (Windows)
+start reports\cucumber-report.html
 
-1.  Run `npm run report`.
-2.  Navigate to the `reports/enhanced/` folder.
-3.  Open `index.html` in any browser.
-4.  **On Failure:** The report automatically embeds full-page visual evidence of the exact failure state.
+# Open cross-browser reports
+start reports\cucumber-chromium.html
+start reports\cucumber-firefox.html
+start reports\cucumber-webkit.html
+```
 
-## Roadmap
+### Docker Execution
 
-* ~~**Week 1:** Foundation, Login Module, Framework Architecture.~~
-* ~~**Week 2:** Dashboard & Admin Module (User Management), Docker Integration, Basic CI/CD, Enhanced Reporting.~~
-* **Week 3:** PIM Module (Data-Driven Testing), Cross-Browser setup.
-* **Week 4:** Leave Module, Enhanced CI/CD Pipeline (GitHub Actions), Final Documentation Polish.
+```powershell
+# Build the Docker image
+npm run docker:build
+
+# Run all tests in Docker
+npm run docker:test
+
+# Run smoke tests in Docker
+npm run docker:test:smoke
+
+# Run with a specific browser
+docker compose run -e BROWSER=firefox playwright-tests npm test
+
+# Clean up
+npm run docker:clean
+```
+
+See `docs/docker-setup.md` for full Docker guide.
+
+</details>
+
+---
+
+## CI/CD
+
+GitHub Actions runs `@smoke` tagged tests automatically on every push to `main`.
+
+- **Pipeline:** `.github/workflows/smoke-tests.yml`
+- **Trigger:** Push to `main` branch
+- **Browser:** Chromium (headless)
+- **Environment:** Docker container (ubuntu-latest)
+
+---
+
+## Test Coverage
+
+<details>
+<summary><strong>👉 Click to view module breakdown and test types</strong></summary>
+
+### Modules Automated
+
+| Module | Scenarios | Tags |
+| :--- | :--- | :--- |
+| Login | 5 | `@smoke @login @critical @validation` |
+| Dashboard | 6 | `@smoke @dashboard @critical @navigation` |
+| Admin (User Mgmt) | 8 | `@smoke @admin @critical @add @edit @delete @search @validation` |
+| PIM (Employee Mgmt) | 13 | `@smoke @pim @critical @add @edit @delete @search @validation @e2e @data-driven` |
+| **Total** | **32 runnable** | *(2 @skip)* |
+
+### Test Types
+
+| Type | Description |
+| :--- | :--- |
+| **Smoke** | Critical path — runs on every CI push |
+| **Functional** | Feature-level CRUD validations |
+| **Validation** | Form validation and error handling |
+| **End-to-End** | Full lifecycle flows (Login → CRUD → Logout) |
+| **Data-Driven** | Scenario Outline with inline Gherkin Examples tables |
+| **Cross-Browser** | Chromium, Firefox, WebKit |
+
+</details>
+
+---
+
+## Design Patterns
+
+### Page Object Model
+
+Each page has its own class in `src/pages/`. Locators are defined in the constructor using container scoping and label-based filtering:
+
+```typescript
+this.searchContainer = page.locator('.oxd-table-filter');
+this.searchInput = this.searchContainer
+  .locator('.oxd-input-group')
+  .filter({ hasText: 'Employee Name' })
+  .locator('input');
+```
+
+### API-Aware Waiting
+
+No `waitForTimeout()` anywhere in the framework. All async operations wait for the relevant API response:
+
+```typescript
+const responsePromise = this.page.waitForResponse(
+  (response) =>
+    response.url().includes('/api/v2/pim/employees') &&
+    response.status() === 200
+);
+await this.searchButton.click();
+await responsePromise;
+```
+
+### Parallel-Safe World Object
+
+Scenario-specific data is stored in `this.scenarioData` (not module-level variables), making all scenarios safe for parallel execution:
+
+```typescript
+this.scenarioData.testFirstName = DataGenerator.generateUniqueEmployeeName();
+```
+
+### Dynamic Data Generation
+
+All test data is generated at runtime to avoid collisions on the shared demo:
+
+```typescript
+DataGenerator.generateUniqueEmployeeName() // → TestEmp1741234567890
+DataGenerator.generateUniqueUsername()      // → TestUser_1741234567890
+DataGenerator.generatePassword()            // → Test1741234567890!
+```
+
+---
+
+## Configuration
+
+### Environment Variables (.env)
+
+```text
+BASE_URL=https://opensource-demo.orangehrmlive.com
+BROWSER=chromium
+HEADED=false
+TIMEOUT=30000
+VIEWPORT_WIDTH=1920
+VIEWPORT_HEIGHT=1080
+```
+
+Override at runtime using `cross-env`:
+
+```powershell
+npx cross-env BROWSER=firefox HEADED=true npm test
+```
+
+### Documentation
+
+| Document | Location | Description |
+| :--- | :--- | :--- |
+| Master Test Plan | `docs/master-test-plan.md` | Full test strategy and scope |
+| Element Locators | `docs/element-locators.md` | All CSS selectors and locator notes |
+| Docker Setup | `docs/docker-setup.md` | Docker build and run guide |
+
+---
+
+## Test Credentials
+
+```text
+URL:      https://opensource-demo.orangehrmlive.com
+Username: Admin
+Password: admin123
+```
+**This is a shared public demo environment.** Test data created during runs persists until the demo site is reset by OrangeHRM.
+
+---
 
 ## Author
 
-* Shakeeb
+* **Shakeeb**
 * QA Automation Engineer
 * [\[LinkedIn Profile\]](https://www.linkedin.com/in/shakeeb-mohammed-m7/)
 * [\[GitHub Profile\]](https://github.com/M7Shakeeb)

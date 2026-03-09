@@ -10,7 +10,7 @@ npm run docker:build
 \`\`\`
 OR
 \`\`\`powershell
-docker-compose build
+docker compose build
 \`\`\`
 
 ## Run Tests in Docker
@@ -27,7 +27,7 @@ npm run docker:test:smoke
 
 **Run with Specific Browser (Overriding .env)**
 \`\`\`powershell
-docker-compose run -e BROWSER=firefox playwright-tests npm test
+docker compose run -e BROWSER=firefox playwright-tests npm test
 \`\`\`
 
 ## View Reports
@@ -42,9 +42,9 @@ start reports\cucumber-report.html
 Solution:
 \`\`\`powershell
 # Clean up old containers
-docker-compose down -v
+docker compose down -v
 # Rebuild
-docker-compose build --no-cache
+docker compose build --no-cache
 \`\`\`
 
 **Issue: Reports not generated**
