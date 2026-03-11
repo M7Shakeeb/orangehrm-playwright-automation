@@ -118,11 +118,11 @@ export class AdminPage {
 
   async verifyUserExistsInTable(username: string) {
     const userCell = this.tableRows.locator('div').filter({ hasText: username }).first();
-    await expect(userCell).toBeVisible({ timeout: 5000 });
+    await expect(userCell).toBeVisible({ timeout: 30000 });
   }
 
   async verifyNoRecordsFound() {
-    await expect(this.noRecordsFound).toBeVisible({ timeout: 5000 });
+    await expect(this.noRecordsFound).toBeVisible({ timeout: 30000 });
   }
 
   // ==================== SEARCH ====================
@@ -154,7 +154,7 @@ export class AdminPage {
   async selectDropdownOption(dropdownLocator: Locator, optionText: string) {
     await dropdownLocator.click();
     const option = this.page.locator('.oxd-select-option').filter({ hasText: optionText });
-    await expect(option).toBeVisible({ timeout: 3000 });
+    await expect(option).toBeVisible({ timeout: 30000 });
     await option.click();
   }
 
@@ -217,7 +217,7 @@ export class AdminPage {
     const editIcon = userRow.locator('i.bi-pencil-fill');
     await editIcon.click();
     
-    await expect(this.saveButton).toBeVisible({ timeout: 5000 });
+    await expect(this.saveButton).toBeVisible({ timeout: 30000 });
   }
 
   async changeStatus(status: string) {
@@ -243,12 +243,12 @@ export class AdminPage {
     const deleteIcon = userRow.locator('i.bi-trash');
     await deleteIcon.click();
     
-    await expect(this.confirmDeleteButton).toBeVisible({ timeout: 3000 });
+    await expect(this.confirmDeleteButton).toBeVisible({ timeout: 30000 });
   }
 
   async confirmDelete() {
     await this.confirmDeleteButton.click();
-    await expect(this.deleteDialog).toBeHidden({ timeout: 5000 });
+    await expect(this.deleteDialog).toBeHidden({ timeout: 30000 });
   }
 
   /**

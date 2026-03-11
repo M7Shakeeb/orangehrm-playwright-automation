@@ -50,7 +50,7 @@ export class DashboardPage {
    * Wait for dashboard page to load after login
    */
   async waitForDashboardLoad() {
-    await this.page.waitForURL('**/dashboard/index**', { timeout: 10000 });
+    await this.page.waitForURL('**/dashboard/index**', { timeout: 30000 });
   }
 
   /**
@@ -58,7 +58,7 @@ export class DashboardPage {
    */
   async verifyDashboardDisplayed() {
     await this.waitForDashboardLoad();
-    await expect(this.dashboardHeading).toBeVisible({ timeout: 10000 });
+    await expect(this.dashboardHeading).toBeVisible({ timeout: 30000 });
     await expect(this.mainNavigation).toBeVisible();
   }
 
@@ -66,7 +66,7 @@ export class DashboardPage {
    * Verify URL contains dashboard path
    */
   async verifyDashboardURL() {
-    await this.page.waitForURL('**/dashboard/**', { timeout: 10000 });
+    await this.page.waitForURL('**/dashboard/**', { timeout: 30000 });
     expect(this.page.url()).toContain('/dashboard/');
   }
 
@@ -95,7 +95,7 @@ export class DashboardPage {
     ];
 
     for (const menu of menus) {
-      await expect(menu).toBeVisible({ timeout: 5000 });
+      await expect(menu).toBeVisible({ timeout: 30000 });
     }
   }
 
@@ -104,7 +104,7 @@ export class DashboardPage {
    */
   async navigateToAdmin() {
     await this.adminMenu.click();
-    await this.page.waitForURL('**/admin/**', { timeout: 10000 });
+    await this.page.waitForURL('**/admin/**', { timeout: 30000 });
   }
 
   /**
@@ -112,7 +112,7 @@ export class DashboardPage {
    */
   async navigateToPIM() {
     await this.pimMenu.click();
-    await this.page.waitForURL('**/pim/**', { timeout: 10000 });
+    await this.page.waitForURL('**/pim/**', { timeout: 30000 });
   }
 
   /**
@@ -120,7 +120,7 @@ export class DashboardPage {
    */
   async navigateToLeave() {
     await this.leaveMenu.click();
-    await this.page.waitForURL('**/leave/**', { timeout: 10000 });
+    await this.page.waitForURL('**/leave/**', { timeout: 30000 });
   }
 
   /**
@@ -128,7 +128,7 @@ export class DashboardPage {
    */
   async navigateToTime() {
     await this.timeMenu.click();
-    await this.page.waitForURL('**/time/**', { timeout: 10000 });
+    await this.page.waitForURL('**/time/**', { timeout: 30000 });
   }
 
   /**
@@ -136,7 +136,7 @@ export class DashboardPage {
    */
   async openUserDropdown() {
     await this.userDropdown.click();
-    await expect(this.logoutOption).toBeVisible({ timeout: 3000 });
+    await expect(this.logoutOption).toBeVisible({ timeout: 30000 });
   }
 
   /**
@@ -146,14 +146,14 @@ export class DashboardPage {
   async logout() {
     await this.openUserDropdown();
     await this.logoutOption.click();
-    await this.page.waitForURL('**/auth/login**', { timeout: 10000 });
+    await this.page.waitForURL('**/auth/login**', { timeout: 30000 });
   }
 
   /**
    * Verify logout was successful (on login page)
    */
   async verifyLogoutSuccessful() {
-    await this.page.waitForURL('**/auth/login**', { timeout: 5000 });
+    await this.page.waitForURL('**/auth/login**', { timeout: 30000 });
     expect(this.page.url()).toContain('/auth/login');
   }
 

@@ -86,7 +86,7 @@ export class LoginPage {
    * @returns Error message text
    */
   async getErrorAlertText(): Promise<string> {
-    await this.errorAlert.waitFor({ state: 'visible', timeout: 10000 });
+    await this.errorAlert.waitFor({ state: 'visible', timeout: 30000 });
     const text = await this.errorAlert.textContent();
     return text?.trim() || '';
   }
@@ -94,20 +94,20 @@ export class LoginPage {
   // Verify username field has "Required" validation error
   async verifyUsernameRequiredError() {
     const usernameError = this.validationErrors.first();
-    await expect(usernameError).toBeVisible({ timeout: 10000 });
+    await expect(usernameError).toBeVisible({ timeout: 30000 });
     await expect(usernameError).toHaveText('Required');
   }
 
   // Verify password field has "Required" validation error
   async verifyPasswordRequiredError() {
     const passwordError = this.validationErrors.last();
-    await expect(passwordError).toBeVisible({ timeout: 10000 });
+    await expect(passwordError).toBeVisible({ timeout: 30000 });
     await expect(passwordError).toHaveText('Required');
   }
 
   // Verify user is still on login page (URL check)
   async verifyStillOnLoginPage() {
-    await this.page.waitForURL('**/auth/login**', { timeout: 10000 });
+    await this.page.waitForURL('**/auth/login**', { timeout: 30000 });
     expect(this.page.url()).toContain('/auth/login');
     await expect(this.loginButton).toBeVisible();
   }

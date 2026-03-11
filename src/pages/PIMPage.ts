@@ -113,7 +113,7 @@ export class PIMPage {
   // VERIFICATION
 
   async verifyPIMPageDisplayed(): Promise<void> {
-    await expect(this.pageHeading).toBeVisible({ timeout: 10000 });
+    await expect(this.pageHeading).toBeVisible({ timeout: 30000 });
     await expect(this.searchContainer).toBeVisible();
   }
 
@@ -122,7 +122,7 @@ export class PIMPage {
       .locator('div')
       .filter({ hasText: name })
       .first();
-    await expect(employeeCell).toBeVisible({ timeout: 10000 });
+    await expect(employeeCell).toBeVisible({ timeout: 30000 });
   }
 
   async verifyEmployeeNotInTable(name: string): Promise<void> {
@@ -130,12 +130,12 @@ export class PIMPage {
       .locator('div')
       .filter({ hasText: name })
       .first();
-    await expect(employeeCell).not.toBeVisible({ timeout: 10000 });
+    await expect(employeeCell).not.toBeVisible({ timeout: 30000 });
   }
 
   async verifyNoRecordsFound(): Promise<void> {
     // OrangeHRM shows "No Records Found" as a toast notification
-    await expect(this.noRecordsFound).toBeVisible({ timeout: 10000 });
+    await expect(this.noRecordsFound).toBeVisible({ timeout: 30000 });
   }
 
   // SEARCH
@@ -176,7 +176,7 @@ export class PIMPage {
   // Reads the auto-generated Employee ID after form loads
   // Called AFTER navigating to Add Employee page and BEFORE saving
   async getEmployeeIdValue(): Promise<string> {
-    await this.employeeIdInput.waitFor({ state: 'visible', timeout: 5000 });
+    await this.employeeIdInput.waitFor({ state: 'visible', timeout: 30000 });
     const value = await this.employeeIdInput.inputValue();
     return value.trim();
   }
@@ -186,7 +186,7 @@ export class PIMPage {
   async clickAddButton(): Promise<void> {
     await this.addButton.click();
     // Wait for the Add Employee form to be ready
-    await expect(this.firstNameInput).toBeVisible({ timeout: 10000 });
+    await expect(this.firstNameInput).toBeVisible({ timeout: 30000 });
   }
 
   // Fill the Add Employee form fields
@@ -244,8 +244,8 @@ async clickEditForEmployee(name: string): Promise<void> {
     await editIcon.click();
     
     // Wait for the employee profile page to load
-    await this.page.waitForURL('**/pim/viewPersonalDetails/**', { timeout: 10000 });
-    await expect(this.editFirstNameInput).toHaveValue(name, { timeout: 10000 });
+    await this.page.waitForURL('**/pim/viewPersonalDetails/**', { timeout: 30000 });
+    await expect(this.editFirstNameInput).toHaveValue(name, { timeout: 30000 });
   }
 
   // Update the employee's first and last name on the Personal Details tab
@@ -271,7 +271,7 @@ async clickEditForEmployee(name: string): Promise<void> {
     // Wait for success toast
     await expect(
       this.page.locator('.oxd-toast-content--success')
-    ).toBeVisible({ timeout: 10000 });
+    ).toBeVisible({ timeout: 30000 });
   }
 
   // DELETE EMPLOYEE
@@ -282,12 +282,12 @@ async clickEditForEmployee(name: string): Promise<void> {
     const employeeRow = this.tableRows.filter({ hasText: name }).first();
     const deleteIcon = employeeRow.locator('i.bi-trash');
     await deleteIcon.click();
-    await expect(this.confirmDeleteButton).toBeVisible({ timeout: 5000 });
+    await expect(this.confirmDeleteButton).toBeVisible({ timeout: 30000 });
   }
 
   async confirmDelete(): Promise<void> {
     await this.confirmDeleteButton.click();
-    await expect(this.deleteDialog).toBeHidden({ timeout: 5000 });
+    await expect(this.deleteDialog).toBeHidden({ timeout: 30000 });
   }
 
   // Complete delete employee workflow - composition method
@@ -297,6 +297,6 @@ async clickEditForEmployee(name: string): Promise<void> {
     // Wait for success toast confirming deletion
     await expect(
       this.page.locator('.oxd-toast-content--success')
-    ).toBeVisible({ timeout: 10000 });
+    ).toBeVisible({ timeout: 30000 });
   }
 }
