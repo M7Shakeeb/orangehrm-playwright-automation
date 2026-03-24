@@ -9,6 +9,8 @@ A production-quality test automation framework for the
 [OrangeHRM Demo](https://opensource-demo.orangehrmlive.com) application,
 built as a portfolio project demonstrating modern QA engineering practices.
 
+**Status: 4-week project complete — March 23, 2026**
+
 ---
 
 ## Tech Stack
@@ -28,23 +30,26 @@ built as a portfolio project demonstrating modern QA engineering practices.
 
 ```text
 orangehrm-playwright-automation/
-├── .github/workflows/    # CI/CD pipeline
+├── .github/workflows/    # CI/CD pipeline (smoke + regression matrix)
 ├── src/
 │   ├── features/         # Gherkin feature files
 │   │   ├── login.feature
 │   │   ├── dashboard.feature
 │   │   ├── admin.feature
-│   │   └── pim.feature
+│   │   ├── pim.feature
+│   │   └── leave.feature
 │   ├── steps/            # Step definitions
 │   │   ├── loginSteps.ts
 │   │   ├── dashboardSteps.ts
 │   │   ├── adminSteps.ts
-│   │   └── pimSteps.ts
+│   │   ├── pimSteps.ts
+│   │   └── leaveSteps.ts
 │   ├── pages/            # Page Object Model classes
 │   │   ├── LoginPage.ts
 │   │   ├── DashboardPage.ts
 │   │   ├── AdminPage.ts
-│   │   └── PIMPage.ts
+│   │   ├── PIMPage.ts
+│   │   └── LeavePage.ts
 │   ├── hooks/            # Cucumber hooks (browser setup/teardown)
 │   │   └── hooks.ts
 │   ├── utils/            # Utilities
@@ -70,6 +75,8 @@ orangehrm-playwright-automation/
 
 ---
 
+## Quick Start
+
 ### Prerequisites
 - Node.js 18.x or higher
 - npm
@@ -78,7 +85,7 @@ orangehrm-playwright-automation/
 ### Installation
 
 ```powershell
-git clone <your-repo-url>
+git clone https://github.com/M7Shakeeb/orangehrm-playwright-automation.git
 cd orangehrm-playwright-automation
 npm install
 npx playwright install
@@ -107,11 +114,13 @@ npm run test:smoke
 
 | Command | Description |
 | :--- | :--- |
-| `npm test` | Run full test suite (all browsers default to Chromium) |
+| `npm test` | Run full test suite (parallel: 2, default profile) |
 | `npm run test:headed` | Run with browser UI visible (for debugging) |
 | `npm run test:smoke` | Run `@smoke` tagged scenarios only |
 | `npm run test:regression` | Run full suite with minimal output |
 | `npm run test:pim` | Run PIM feature file only (excludes `@skip`) |
+| `npm run test:leave` | Run Leave feature file only (excludes `@skip`) |
+| `npm run test:leave:headed` | Run Leave feature in headed mode (for debugging) |
 | `npm run test:chrome` | Run full suite on Chromium |
 | `npm run test:firefox` | Run full suite on Firefox |
 | `npm run test:webkit` | Run full suite on WebKit |
@@ -120,29 +129,31 @@ npm run test:smoke
 ### Tag-Based Execution
 
 ```powershell
-# Run by tag (append --tags "..." to cucumber-js command)
-npx cucumber-js src/features --tags "@smoke"
-npx cucumber-js src/features --tags "@pim and @add"
-npx cucumber-js src/features --tags "@e2e"
-npx cucumber-js src/features --tags "not @skip"
-npx cucumber-js src/features --tags "@data-driven"
+# Run by tag
+npx cucumber-js src/features -p default --tags "@smoke"
+npx cucumber-js src/features -p default --tags "@pim and @add"
+npx cucumber-js src/features -p default --tags "@e2e"
+npx cucumber-js src/features -p default --tags "not @skip"
+npx cucumber-js src/features -p default --tags "@data-driven"
+npx cucumber-js src/features -p default --tags "@leave"
 ```
 
 ### Cross-Browser (Single Feature)
 
 ```powershell
-npx cross-env BROWSER=firefox npx cucumber-js src/features/pim.feature -p firefox --tags "not @skip"
-npx cross-env BROWSER=webkit npx cucumber-js src/features -p webkit --tags "@smoke"
+npx cross-env BROWSER=firefox cucumber-js src/features/pim.feature -p firefox --tags "not @skip"
+npx cross-env BROWSER=webkit cucumber-js src/features/leave.feature -p webkit --tags "not @skip"
+npx cross-env BROWSER=webkit cucumber-js src/features -p webkit --tags "@smoke"
 ```
 
 ### Reports
 
 ```powershell
-# Generate HTML report from last JSON run
+# Generate enhanced HTML report from last JSON run
 npm run report
 
-# Open report (Windows)
-start reports\cucumber-report.html
+# Open enhanced report (Windows)
+start reports\enhanced\index.html
 
 # Open cross-browser reports
 start reports\cucumber-chromium.html
@@ -177,12 +188,16 @@ See `docs/docker-setup.md` for full Docker guide.
 
 ## CI/CD
 
-GitHub Actions runs `@smoke` tagged tests automatically on every push to `main`.
+GitHub Actions runs `@smoke` tagged tests automatically on every push to `main`
+and on every pull request. A regression job then runs the full suite across all
+three browsers (Chromium, Firefox, WebKit) after the smoke job passes.
 
 - **Pipeline:** `.github/workflows/smoke-tests.yml`
-- **Trigger:** Push to `main` branch
-- **Browser:** Chromium (headless)
+- **Triggers:** Push to `main`, Pull Requests to `main`, Manual dispatch
+- **Smoke job:** Chromium headless — fast feedback on every push
+- **Regression job:** Browser matrix (Chromium, Firefox, WebKit) — runs after smoke
 - **Environment:** Docker container (ubuntu-latest)
+- **Artifacts:** HTML reports and failure screenshots retained for 14 days
 
 ---
 
@@ -193,20 +208,23 @@ GitHub Actions runs `@smoke` tagged tests automatically on every push to `main`.
 
 ### Modules Automated
 
-| Module | Scenarios | Tags |
-| :--- | :--- | :--- |
-| Login | 5 | `@smoke @login @critical @validation` |
-| Dashboard | 6 | `@smoke @dashboard @critical @navigation` |
-| Admin (User Mgmt) | 8 | `@smoke @admin @critical @add @edit @delete @search @validation` |
-| PIM (Employee Mgmt) | 13 | `@smoke @pim @critical @add @edit @delete @search @validation @e2e @data-driven` |
-| **Total** | **32 runnable** | *(2 @skip)* |
+| Module | Runnable Scenarios | @skip | Tags |
+| :--- | :--- | :--- | :--- |
+| Login | 5 | 0 | `@smoke @login @critical @validation` |
+| Dashboard | 6 | 0 | `@smoke @dashboard @critical @navigation` |
+| Admin (User Mgmt) | 6 | 2 | `@smoke @admin @critical @add @edit @delete @search @validation @skip` |
+| PIM (Employee Mgmt) | 13 | 2 | `@smoke @pim @critical @add @edit @delete @search @validation @e2e @data-driven @skip` |
+| Leave (Leave Mgmt) | 5 | 3 | `@smoke @leave @critical @list @navigation @search @apply @cancel @data-driven @skip` |
+| **Total** | **35 runnable** | **7 @skip** | |
+
+> **Note on `@skip` scenarios:** Fragile scenarios on the shared demo are tagged `@skip` rather than deleted.
 
 ### Test Types
 
 | Type | Description |
 | :--- | :--- |
 | **Smoke** | Critical path — runs on every CI push |
-| **Functional** | Feature-level CRUD validations |
+| **Functional** | Feature-level CRUD and workflow validations |
 | **Validation** | Form validation and error handling |
 | **End-to-End** | Full lifecycle flows (Login → CRUD → Logout) |
 | **Data-Driven** | Scenario Outline with inline Gherkin Examples tables |
@@ -220,25 +238,27 @@ GitHub Actions runs `@smoke` tagged tests automatically on every push to `main`.
 
 ### Page Object Model
 
-Each page has its own class in `src/pages/`. Locators are defined in the constructor using container scoping and label-based filtering:
+Each page has its own class in `src/pages/`. Locators are defined in the
+constructor using container scoping and label-based filtering:
 
 ```typescript
-this.searchContainer = page.locator('.oxd-table-filter');
-this.searchInput = this.searchContainer
+this.filterContainer = page.locator('.oxd-table-filter');
+this.leaveTypeDropdown = this.filterContainer
   .locator('.oxd-input-group')
-  .filter({ hasText: 'Employee Name' })
-  .locator('input');
+  .filter({ hasText: 'Leave Type' })
+  .locator('.oxd-select-text');
 ```
 
 ### API-Aware Waiting
 
-No `waitForTimeout()` anywhere in the framework. All async operations wait for the relevant API response:
+No `waitForTimeout()` anywhere in the framework. All async operations wait
+for the relevant API response:
 
 ```typescript
 const responsePromise = this.page.waitForResponse(
-  (response) =>
-    response.url().includes('/api/v2/pim/employees') &&
-    response.status() === 200
+  (r) =>
+    r.url().includes('/api/v2/leave/leave-requests') &&
+    r.status() === 200
 );
 await this.searchButton.click();
 await responsePromise;
@@ -246,10 +266,24 @@ await responsePromise;
 
 ### Parallel-Safe World Object
 
-Scenario-specific data is stored in `this.scenarioData` (not module-level variables), making all scenarios safe for parallel execution:
+Scenario-specific data is stored in `this.scenarioData` (not module-level
+variables), making all scenarios safe for `parallel: 2` execution:
 
 ```typescript
-this.scenarioData.testFirstName = DataGenerator.generateUniqueEmployeeName();
+this.scenarioData.testLeaveType = 'Annual Leave';
+this.scenarioData.testLeaveFromDate = '2026-04-01';
+```
+
+### Defensive Shared-Environment Guards
+
+The shared demo has an unpredictable state (e.g., zero leave balance). Page
+objects use `Promise.race` to handle multiple valid UI states gracefully:
+
+```typescript
+await Promise.race([
+  expect(this.formContainer).toBeVisible({ timeout: 15000 }),
+  expect(this.noLeaveBalanceMessage).toBeVisible({ timeout: 15000 }),
+]).catch(() => {});
 ```
 
 ### Dynamic Data Generation
@@ -287,8 +321,8 @@ npx cross-env BROWSER=firefox HEADED=true npm test
 
 | Document | Location | Description |
 | :--- | :--- | :--- |
-| Master Test Plan | `docs/master-test-plan.md` | Full test strategy and scope |
-| Element Locators | `docs/element-locators.md` | All CSS selectors and locator notes |
+| Master Test Plan | `docs/master-test-plan.md` | Full test strategy, scope, and weekly milestones |
+| Element Locators | `docs/element-locators.md` | All CSS selectors and locator notes (all 5 modules) |
 | Docker Setup | `docs/docker-setup.md` | Docker build and run guide |
 
 ---
@@ -300,7 +334,10 @@ URL:      https://opensource-demo.orangehrmlive.com
 Username: Admin
 Password: admin123
 ```
-**This is a shared public demo environment.** Test data created during runs persists until the demo site is reset by OrangeHRM.
+
+**This is a shared public demo environment.** Test data created during runs
+persists until the demo site is reset by OrangeHRM. Leave balance may be
+zero at any time — Apply Leave tests are covered as Manual Only Jira cases.
 
 ---
 
@@ -308,8 +345,8 @@ Password: admin123
 
 * **Shakeeb**
 * QA Automation Engineer
-* [\[LinkedIn Profile\]](https://www.linkedin.com/in/shakeeb-mohammed-m7/)
-* [\[GitHub Profile\]](https://github.com/M7Shakeeb)
+* [LinkedIn Profile](https://www.linkedin.com/in/shakeeb-mohammed-m7/)
+* [GitHub Profile](https://github.com/M7Shakeeb)
 
 ---
 *License: MIT*

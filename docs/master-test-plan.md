@@ -2,8 +2,8 @@
 
 **Project:** OrangeHRM Demo Application Test Automation
 **Author:** Shakeeb
-**Date:** March 4, 2026
-**Version:** 1.4
+**Date:** March 23, 2026
+**Version:** 1.5
 **Status:** Active
 
 ---
@@ -46,7 +46,7 @@ This Master Test Plan serves to:
 | **P0 - Critical** | **Dashboard** | (Full Testing) Navigation menu, user dropdown, logout, widgets | Week 2 |
 | **P1 - High** | **Admin** | User management (search, add, edit, delete users), role assignment | Week 2 |
 | **P1 - High** | **PIM** | Employee management (search, add, edit, delete employees) | Week 3 |
-| **P2 - Medium** | **Leave** | Apply leave, leave list, leave type configuration | Week 4 |
+| **P2 - Medium** | **Leave** | Apply leave, leave list, leave type configuration, status filtering | Week 4 |
 
 ### 2.2 Test Types In Scope
 ✅ **Functional Testing** - Feature-level validations (CRUD operations, workflows)
@@ -90,6 +90,9 @@ This Master Test Plan serves to:
 **Architectural Pivot (Parallel Execution Support):**
 Module-level variables (e.g., `let testUsername = ''`) are officially deprecated to support parallel execution. When running `parallel: 2`, module-level variables share memory space between workers, causing state bleeding and test collisions. All dynamic scenario state must now be strictly stored in `CustomWorld.scenarioData`.
 
+**Shared Environment Strategy (Week 4 Leave Module):**
+Apply Leave submission and Cancel Leave are excluded from automated scenarios due to the shared demo's unreliable leave entitlement state (other users deplete balances). These workflows are documented with `@skip` tags and covered by Manual Only Jira test cases. Navigation, rendering, and filter scenarios are fully automated using defensive guards.
+
 ### 3.2 Test Prioritization Strategy
 **P0 - Critical (Smoke Tests):**
 - Must pass for every build.
@@ -107,7 +110,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 **Local Development:**
 - Run smoke tests before commit (`npm run test:smoke`).
 - Use headed mode for debugging (`npm run test:headed`).
-- Run PIM module only (`npm run test:pim`).
+- Run Leave module only (`npm run test:leave`).
 
 **Dockerized Execution (Week 2+):**
 - Tests run inside Docker containers for consistent environment.
@@ -115,8 +118,8 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 **CI/CD Pipeline (Week 2+):**
 - **Platform:** GitHub Actions.
 - **Trigger:** Every push to `main` branch, pull requests.
-- **Run:** Smoke tests only (fast feedback).
-- **Browsers:** Chromium only in CI (speed optimization).
+- **Smoke job:** Chromium only (fast feedback, runs first).
+- **Regression job:** Browser matrix (Chromium, Firefox, WebKit) — runs after smoke passes.
 
 **Cross-Browser Testing (Week 3+):**
 - Run full suite against: Chromium, Firefox, WebKit.
@@ -147,6 +150,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - ⚠️ Shared environment - other users testing simultaneously.
 - ⚠️ Cannot delete pre-existing demo data.
 - ⚠️ Parallel: 2 is the safe maximum for the shared demo site.
+- ⚠️ Leave balance may be zero at any time — Apply Leave tests run as Manual Only.
 
 ### 4.2 Test Execution Environment
 
@@ -170,14 +174,14 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - ✅ Test hooks (`src/hooks/`)
 - ✅ Configuration files (`.env`, `cucumber.json`, `package.json`)
 - ✅ **Docker Artifacts:** `Dockerfile`, `docker-compose.yml`, `.dockerignore` (Week 2+)
-- ✅ **CI/CD:** GitHub Actions workflow `.yml` (Week 2+)
+- ✅ **CI/CD:** GitHub Actions workflow `.yml` with smoke + regression matrix (Week 2+/4+)
 - ✅ **Utilities:** `DataGenerator` with type-safe interfaces (Week 2+/3+)
 
 ### 5.2 Documentation
 - ✅ Master Test Plan (this document)
 - ✅ README with setup instructions
 - ✅ Element locators reference (`docs/element-locators.md`)
-- ✅ Test case specifications in Jira
+- ✅ Test case specifications in Jira (TC_LOGIN through TC_LEAVE)
 - ✅ Docker setup guide (`docs/docker-setup.md`) (Week 2+)
 - ✅ Cross-browser testing guide (`docs/cross-browser-testing.md`) (Week 3+)
 
@@ -185,6 +189,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - **Week 1:** Cucumber JSON report & Basic HTML report.
 - **Week 2+:** Enhanced HTML Report (w/ Screenshots) & CI/CD Execution Logs.
 - **Week 3+:** Per-browser HTML reports (`cucumber-chromium.html`, `cucumber-firefox.html`, `cucumber-webkit.html`).
+- **Week 4+:** Enhanced HTML report via `multiple-cucumber-html-reporter` with `projectName`, `customData`, and `saveCollectedJSON`.
 
 ---
 
@@ -222,7 +227,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - [x] Enhanced HTML reporting implemented.
 
 **Week 3 - Exit Criteria:**
-- [x] PIM module (employee management) automated (14 scenarios including Scenario Outline).
+- [x] PIM module (employee management) automated (13 runnable + 2 @skip scenarios).
 - [x] Full E2E scenario: Login → Add Employee → Verify → Edit → Verify → Delete → Verify → Logout.
 - [x] Data-driven testing with inline Scenario Outlines.
 - [x] Cross-browser testing active (Chromium, Firefox, WebKit).
@@ -231,12 +236,18 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - [x] Parallel execution configured (`parallel: 2`) with World-based scenario data.
 - [x] 20 Jira test cases added for PIM (TC_PIM_001 through TC_PIM_020).
 - [x] Element locators doc updated with PIM section.
-- [x] Cross-browser testing guide added (`docs/cross-browser-testing.md`)..
+- [x] Cross-browser testing guide added (`docs/cross-browser-testing.md`).
 
 **Week 4 - Exit Criteria:**
-- [ ] Leave module automated.
-- [ ] Enhanced CI/CD pipeline.
-- [ ] Comprehensive README and architecture diagrams.
+- [x] Leave module automated (5 runnable scenarios, 3 @skip scaffolded).
+- [x] Full E2E: Login → Leave module → Apply Leave page → My Leave List → Leave List columns → Logout.
+- [x] Data-driven Scenario Outline with inline Examples (scaffolded under @skip).
+- [x] Enhanced CI/CD: PR trigger, regression job, browser matrix (chromium/firefox/webkit).
+- [x] Enhanced HTML report: `projectName`, `customData`, `saveCollectedJSON` configured.
+- [x] TypeScript compile check passed, no `any` types (except internal Playwright context options).
+- [x] 8 Jira test cases added (TC_LEAVE_001 through TC_LEAVE_008).
+- [x] `element-locators.md` updated with complete Leave module section.
+- [x] Total runnable scenario count: 30+ across all modules.
 
 ---
 
@@ -253,6 +264,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 | **GitHub Actions Quota** | Low | Limit CI runs to `main` branch + PRs only. |
 | **Parallel execution instability** | Medium | Cap at `parallel: 2`; revert to 1 if demo site rate-limits. |
 | **Shared demo data mutation** | Medium | Use `DataGenerator` for unique names; tag fragile tests `@skip`. |
+| **Leave balance depletion** | Medium | Defensive `Promise.race` guard in `navigateToApplyLeave()`; apply/cancel tests are Manual Only. |
 
 ---
 
@@ -272,9 +284,9 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 ## 9. Project Schedule
 
 ### 9.1 Timeline Overview
-**Total Duration:** 4 phases  
-**Start Date:** February 3, 2026  
-**Target Completion:** March 16, 2026
+**Total Duration:** 4 weeks
+**Start Date:** February 3, 2026
+**Completion Date:** March 23, 2026
 
 ### 9.2 Weekly Breakdown
 
@@ -282,8 +294,8 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 |------|-------------|------------------|
 | **Week 1** | Foundation + Login | Framework, Login PO, 5 Scenarios, Jira, Git Repo |
 | **Week 2** | Dashboard + Admin + Docker | Admin PO, Dockerfile, CI Pipeline, Enhanced Reporting |
-| **Week 3** | PIM + Cross-Browser + Parallel | PIM PO, E2E, Data-Driven, Cross-Browser, 35 Scenarios |
-| **Week 4** | Leave + Polish | Leave PO, Final Docs, Demo Video |
+| **Week 3** | PIM + Cross-Browser + Parallel | PIM PO, E2E, Data-Driven, Cross-Browser, 30 Scenarios |
+| **Week 4** | Leave + CI/CD Polish + Final Docs | Leave PO, E2E, Regression Matrix, 30+ Scenarios, README |
 
 ---
 
@@ -292,7 +304,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 - ✅ **Test Stability:** >95% pass rate on stable tests, <5% flakiness.
 - ✅ **Performance:** <15 minutes for full suite execution.
 - ✅ **Parallel Safety:** All scenario-specific data stored in `CustomWorld.scenarioData`.
-- ✅ **Portfolio Ready:** Clear README, Working CI/CD, Demo Video.
+- ✅ **Portfolio Ready:** Clear README, Working CI/CD, Jira test cases, 4 documentation files.
 
 ---
 
@@ -304,7 +316,7 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 | **Language** | TypeScript | Type-safe code |
 | **BDD** | Cucumber | Gherkin scenarios |
 | **Container** | Docker | Consistent environment (Week 2) |
-| **CI/CD** | GitHub Actions | Automated pipeline (Week 2) |
+| **CI/CD** | GitHub Actions | Automated pipeline (Week 2+) |
 | **Reporting** | Cucumber HTML + multiple-cucumber-html-reporter | Test reports |
 | **Cross-Browser** | Playwright (Chromium/Firefox/WebKit) | Browser compatibility (Week 3) |
 
@@ -319,8 +331,9 @@ Module-level variables (e.g., `let testUsername = ''`) are officially deprecated
 | 1.2 | Feb 10, 2026 | Simplified structure, reduced verbosity, improved readability |
 | 1.3 | Feb 19, 2026 | Marked Week 2 milestones as complete, updated reporting tools |
 | 1.4 | Mar 4, 2026 | Marked Week 3 milestones as complete; added parallel execution, cross-browser, data-driven, and E2E entries |
+| 1.5 | Mar 23, 2026 | Marked Week 4 complete; added Leave module scope, @skip strategy, CI/CD regression matrix, enhanced reporting config, Jira TC_LEAVE entries, updated scenario count to 30+ |
 
 ---
 
-**Approved By:** Shakeeb  
-**Date:** March 4, 2026
+**Approved By:** Shakeeb
+**Date:** March 23, 2026

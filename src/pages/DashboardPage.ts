@@ -158,7 +158,7 @@ export class DashboardPage {
   }
 
   /**
-   * Navigate back to dashboard from any module
+   * Navigate back to dashboard from anywhere
    */
   async navigateToDashboard() {
     await this.dashboardMenu.click();

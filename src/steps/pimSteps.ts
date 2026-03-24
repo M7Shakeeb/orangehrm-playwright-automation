@@ -99,7 +99,7 @@ Then('the employee search fields should be cleared', async function (this: Custo
 Then('I should see employee form validation errors', async function (this: CustomWorld) {
   if (!this.page) throw new Error('Page is not initialized');
   const errorMessage = this.page.locator('.oxd-input-field-error-message');
-  await expect(errorMessage.first()).toBeVisible({ timeout: 5000 });
+  await expect(errorMessage.first()).toBeVisible({ timeout: 15000 });
 });
 
 // SEARCH

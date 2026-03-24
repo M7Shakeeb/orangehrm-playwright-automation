@@ -5,7 +5,7 @@
     "format": [
       "progress-bar",
       "html:reports/cucumber-report.html",
-      "json:reports/cucumber-report.json"
+      "json:reports/json/cucumber-report.json"
     ],
     "formatOptions": { "snippetInterface": "async-await" },
     "parallel": 2,
@@ -18,7 +18,7 @@
     "format": [
       "progress-bar",
       "html:reports/cucumber-chromium.html",
-      "json:reports/cucumber-chromium.json"
+      "json:reports/json/cucumber-chromium.json"
     ],
     "formatOptions": { "snippetInterface": "async-await" },
     "parallel": 1,
@@ -32,7 +32,7 @@
     "format": [
       "progress-bar",
       "html:reports/cucumber-firefox.html",
-      "json:reports/cucumber-firefox.json"
+      "json:reports/json/cucumber-firefox.json"
     ],
     "formatOptions": { "snippetInterface": "async-await" },
     "parallel": 1,
@@ -46,7 +46,7 @@
     "format": [
       "progress-bar",
       "html:reports/cucumber-webkit.html",
-      "json:reports/cucumber-webkit.json"
+      "json:reports/json/cucumber-webkit.json"
     ],
     "formatOptions": { "snippetInterface": "async-await" },
     "parallel": 1,

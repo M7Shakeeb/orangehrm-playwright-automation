@@ -11,6 +11,12 @@ export interface ScenarioData {
   testLastName?: string;
   testUpdatedFirstName?: string;
   testEmployeeId?: string;
+  // Leave module
+  testLeaveType?: string;
+  testLeaveFromDate?: string;
+  testLeaveToDate?: string;
+  testLeaveComment?: string;
+  testLeaveId?: string;
 }
 
 // CustomWorld interface - defines the shape of 'this' in step definitions
