@@ -64,7 +64,6 @@ orangehrm-playwright-automation/
 │   ├── master-test-plan.md
 │   ├── element-locators.md
 │   ├── docker-setup.md
-│   └── cross-browser-testing.md
 ├── Dockerfile
 ├── docker-compose.yml
 ├── cucumber.json
@@ -324,6 +323,7 @@ npx cross-env BROWSER=firefox HEADED=true npm test
 | Master Test Plan | `docs/master-test-plan.md` | Full test strategy, scope, and weekly milestones |
 | Element Locators | `docs/element-locators.md` | All CSS selectors and locator notes (all 5 modules) |
 | Docker Setup | `docs/docker-setup.md` | Docker build and run guide |
+| Test Cases | `docs/test-cases.md` | All 52 Jira test cases with steps, expected results, and automation status |
 
 ---
 

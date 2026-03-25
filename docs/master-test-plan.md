@@ -183,7 +183,7 @@ Apply Leave submission and Cancel Leave are excluded from automated scenarios du
 - ✅ Element locators reference (`docs/element-locators.md`)
 - ✅ Test case specifications in Jira (TC_LOGIN through TC_LEAVE)
 - ✅ Docker setup guide (`docs/docker-setup.md`) (Week 2+)
-- ✅ Cross-browser testing guide (`docs/cross-browser-testing.md`) (Week 3+)
+- ✅ Test case specifications (`docs/test-cases.md`) — all 52 Jira cases exported with full steps
 
 ### 5.3 Test Reports
 - **Week 1:** Cucumber JSON report & Basic HTML report.
@@ -236,7 +236,6 @@ Apply Leave submission and Cancel Leave are excluded from automated scenarios du
 - [x] Parallel execution configured (`parallel: 2`) with World-based scenario data.
 - [x] 20 Jira test cases added for PIM (TC_PIM_001 through TC_PIM_020).
 - [x] Element locators doc updated with PIM section.
-- [x] Cross-browser testing guide added (`docs/cross-browser-testing.md`).
 
 **Week 4 - Exit Criteria:**
 - [x] Leave module automated (5 runnable scenarios, 3 @skip scaffolded).
